@@ -167,7 +167,7 @@ static inline void clamp_line(char *s) {
 // ============================
 // file: src/event_bus.c
 // ============================
-#include "core.h"
+#include "src/core.h"
 
 void eventbus_init(EventBus *bus) {
     bus->count = 0;
@@ -190,7 +190,7 @@ void eventbus_publish(EventBus *bus, const Event *ev) {
 // ============================
 // file: src/save.c
 // ============================
-#include "core.h"
+#include "src/core.h"
 
 static void ensure_dir(const char *path) {
 #ifdef _WIN32
@@ -291,7 +291,7 @@ bool load_profile(Profile *p) {
 // ============================
 // file: src/analytics.c
 // ============================
-#include "core.h"
+#include "src/core.h"
 
 static int file_exists(const char *p) {
     FILE *f = fopen(p, "r");
@@ -334,7 +334,7 @@ void analytics_log_event(const char *kind, const char *detail, int v) {
 // ============================
 // file: src/challenge.c
 // ============================
-#include "core.h"
+#include "src/core.h"
 
 #define MAX_CHALLENGES 64
 static Challenge g_chals[MAX_CHALLENGES];
@@ -384,7 +384,7 @@ GradeResult challenges_grade(const Challenge *c, int visibility) {
 // ============================
 // file: src/content_arrays.c
 // ============================
-#include "core.h"
+#include "src/core.h"
 
 // Declaration of the learner function from player code
 int sum_array(const int *a, size_t n);
@@ -436,7 +436,7 @@ int sum_array(const int *a, size_t n) {
 // ============================
 // file: src/main.c
 // ============================
-#include "core.h"
+#include "src/core.h"
 
 static EventBus G_BUS;
 static Profile  G_PROFILE;
