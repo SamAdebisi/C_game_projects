@@ -46,3 +46,29 @@ bool save_profile(const Profile *p) {
     fclose(f);
     return true;
 }
+
+bool load_profile(Profile *p) {
+    memset(p, 0, sizeof *p);
+    strncpy(p->name, "Adventurer", sizeof p->name - 1);
+    p->xp = 0; p->level = 1; p->challenges_solved = 0;
+
+    char path[512];
+    get_save_path(path, sizeof path);
+    FILE *f = fopen(path, "r");
+    if (!f) return true;
+
+    char line[256];
+    while (fgets(line, sizeof line, f)) {
+        clamp_line(line);
+        char k[64], v[128];
+        if (sscanf(line, "%63[^=]=%127s", k, v) == 2) {
+            if (strcmp(k, "name") == 0) strncpy(p->name, v, sizeof p->name - 1);
+            else if (strcmp(k, "xp") == 0) p->xp = atoi(v);
+            else if (strcmp(k, "level") == 0) p->level = atoi(v);
+            else if (strcmp(k, "solved") == 0) p->challenges_solved = atoi(v);
+        }
+    }
+    fclose(f);
+    p->level = xp_to_level(p->xp);
+    return true;
+}
