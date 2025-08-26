@@ -32,11 +32,17 @@ char *get_save_dir(char *buf,size_t n){ char base[512]; get_user_dir(base,sizeof
 char *get_save_path(char *buf,size_t n){ char d[512]; get_save_dir(d,sizeof d); snprintf(buf,n,"%s%cprofile.txt",d,PATH_SEP); return buf; }
 char *get_analytics_path(char *buf,size_t n){ char d[512]; get_save_dir(d,sizeof d); snprintf(buf,n,"%s%canalytics.csv",d,PATH_SEP); return buf; }
 
-bool save_profile(const Profile *p){ char path[512]; get_save_path(path,sizeof path); FILE*f=fopen(path,"w"); if(!f) return false; fprintf(f,"name=%s
-",p->name); fprintf(f,"xp=%d
-",p->xp); fprintf(f,"level=%d
-",p->level); fprintf(f,"solved=%d
-",p->challenges_solved); fclose(f); return true; }
+bool save_profile(const Profile *p) {
+    char path[512];
+    get_save_path(path, sizeof path);
+    FILE *f = fopen(path, "w");
+    if (!f) return false;
 
-bool load_profile(Profile *p){ memset(p,0,sizeof *p); strncpy(p->name,"Adventurer",sizeof p->name-1); p->xp=0; p->level=1; p->challenges_solved=0; char path[512]; get_save_path(path,sizeof path); FILE*f=fopen(path,"r"); if(!f) return true; char line[256]; while(fgets(line,sizeof line,f)){ clamp_line(line); char k[64],v[128]; if(sscanf(line,"%63[^=]=%127s",k,v)==2){ if(strcmp(k,"name")==0) strncpy(p->name,v,sizeof p->name-1); else if(strcmp(k,"xp")==0) p->xp=atoi(v); else if(strcmp(k,"level")==0) p->level=atoi(v); else if(strcmp(k,"solved")==0) p->challenges_solved=atoi(v); } } fclose(f); p->level=xp_to_level(p->xp); return true; }
+    fprintf(f, "name=%s\n", p->name);
+    fprintf(f, "xp=%d\n", p->xp);
+    fprintf(f, "level=%d\n", p->level);
+    fprintf(f, "solved=%d\n", p->challenges_solved);
 
+    fclose(f);
+    return true;
+}
